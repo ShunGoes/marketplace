@@ -1,0 +1,11 @@
+body{
+    font-family: 'Rowdies', cursive;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+*{
+    padding: 0;
+    box-sizing: border-box;
+}
