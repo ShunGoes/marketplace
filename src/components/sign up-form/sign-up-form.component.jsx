@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { createAuthUserWithEmailAndPassword , createUserDocumentFromAuth} from "../../utils/firebase/firebase.utils"
+
 
 const defaultFormFields = {
     displayName: '',
@@ -14,11 +16,43 @@ const SignUpForm = () => {
         const {name,value} = event.target
         setFormFields({...formFields, [name]: value})
     }
+    const resetFormFields = () => {
+        setFormFields(defaultFormFields)
+    }
+
+    const handleSubmit = async  (event) => {
+        event.preventDefault()
+
+        // confirm if password matches onSubmit
+        if(password !== confirmPassword){
+            alert('passwords do not match')
+            return
+        }
+
+        try{
+            // create new user with email and password. 
+            // this function returns an object (user) that we can use for auth in the database
+            const {user} = await createAuthUserWithEmailAndPassword(email,password)
+            resetFormFields()
+
+            //  checks if user exist,if not create  a new user, return old user.
+            // we use displayName to override the google's display name property
+            await createUserDocumentFromAuth(user,{displayName})
+        } catch (err){
+            if(err.code === 'auth/email-already-in-use' ){
+                alert('user has been logged before')
+            } else{
+                console.log(err.message);
+            }
+        }
+
+
+    }
 
     return (
         <div>
             <h2> Sign in with your email and password</h2>
-            <form action="" onSubmit={() => {}}>
+            <form action="" onSubmit={handleSubmit}>
                 <label htmlFor="">Display Name</label>
                 <input type="text" onChange={handleChange} value={displayName} name="displayName" required/>
 

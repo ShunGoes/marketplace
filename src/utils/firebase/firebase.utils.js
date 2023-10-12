@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  signInWithRedirect,
+  createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
@@ -34,13 +34,14 @@ export const signInWithGooglePopUp = () => signInWithPopup(auth, provider);
 // connecting to projects firebase
 const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
+  if(!userAuth) return
+
   // reference to a document in the 'users' collection
   const userDocRef = doc(db, "users", userAuth.uid);
 
 // get the document at that refernce point
   const userSnapshot =  await getDoc(userDocRef)
-
 
   // if documents does not exist, target the refernce document and add a new object to it
   if(!userSnapshot.exists()){
@@ -49,7 +50,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
 
     try{
       await setDoc(userDocRef,{
-        displayName,email,createdAt
+        displayName,email,createdAt, ...additionalInformation
       })
     } catch (err){
       console.log('an error occured');
@@ -58,3 +59,10 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   // else if the refernce exist, return that  refernce doc
   return userDocRef
 };
+
+
+export const createAuthUserWithEmailAndPassword = async (email,password) => {
+  if(!email || !password) return 
+
+  return await createUserWithEmailAndPassword(auth,email,password)
+}
