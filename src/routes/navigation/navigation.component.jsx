@@ -15,11 +15,11 @@ const Navigation = () => {
             </Link>
             <div className="nav-links-container">
                 <Link className='nav-links' to='/shop'> shop</Link>
-                <Link className='nav-links' to='/sign-in'> sign in</Link>
+                <Link className='nav-links' to='/auth'> sign in</Link>
             </div>
         </nav>
             <Outlet />
-    </Fragment>
+    </Fragment> 
   )
 }
 
