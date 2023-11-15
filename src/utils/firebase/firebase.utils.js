@@ -1,11 +1,15 @@
 import { initializeApp } from "firebase/app";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  signOut,
+  onAuthStateChanged
 } from "firebase/auth";
+
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -26,7 +30,7 @@ const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
   prompt: "select_account",
 });
-// connecting to Google's auth functionalities
+// connecting to firebase auth functionalities
 export const auth = getAuth();
 
 //  sign in with Google function
@@ -72,3 +76,7 @@ export const signInAuthUserWithEmailAndPassword = async (email,password) => {
 
   return await signInWithEmailAndPassword(auth,email,password)
 }
+
+  export const signOutUser = async () => await signOut(auth)
+
+  export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback) 

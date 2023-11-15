@@ -1,20 +1,26 @@
-import { useState } from "react"
+import { useState} from "react"
+
 import { createAuthUserWithEmailAndPassword , createUserDocumentFromAuth} from "../../utils/firebase/firebase.utils"
+
 import FormInput from "../form-input/form-input.component"
 import './sign-up-form.styles.scss'
 import Button from "../button/button.component"
 
 
+// default stateless object
 const defaultFormFields = {
     displayName: '',
     email: '',
     password: '',
     confirmPassword: ''
 }
+
 const SignUp = () => {
     const [formFields,setFormFields] = useState(defaultFormFields)
     const {displayName,email,password,confirmPassword} = formFields
 
+
+    // track changes in the form field
     const handleChange = (event) => {
         const {name,value} = event.target
         setFormFields({...formFields, [name]: value})
@@ -37,7 +43,7 @@ const SignUp = () => {
             // this function returns an object (user) that we can use for auth in the database
             const {user} = await createAuthUserWithEmailAndPassword(email,password)
             resetFormFields()
-
+            
             //  checks if user exist,if not create  a new user, return old user.
             // we use displayName to override the google's display name property
             await createUserDocumentFromAuth(user,{displayName})
@@ -51,7 +57,6 @@ const SignUp = () => {
 
 
     }
-
     return (
         <div className="sign-up-container">
             <h2> Don't have an account</h2>
