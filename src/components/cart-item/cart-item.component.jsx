@@ -2,7 +2,6 @@
 
 const CartItem = ({cartItem}) => {
     const {name,quantity} = cartItem
-    console.log(quantity)
     return(
         <div>
             <h2>{name}</h2>
